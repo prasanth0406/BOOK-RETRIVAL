@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stacks — Book Retrieval</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script>
+  window.GENRE_COLORS = {{ genre_colors | tojson }};
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">Stacks</span>
+    <span class="brand-sub">book retrieval system</span>
+  </div>
+  <p class="brand-tagline">TF&#8209;IDF &amp; BM25 &middot; cosine ranking &middot; {{ "{:,}".format(book_count) }} books catalogued</p>
+</header>
+
+<section class="hero">
+  <h1>Describe a book you're thinking of &mdash; even vaguely.</h1>
+  <div class="search-row">
+    <input type="text" id="query" placeholder="try &ldquo;orphan discovers hidden magical power&rdquo;" autocomplete="off">
+    <button id="search-btn">Search</button>
+  </div>
+  <div class="model-toggle">
+    <span class="model-toggle-label">Ranking model</span>
+    <button class="model-btn active" data-model="tfidf">TF&#8209;IDF</button>
+    <button class="model-btn" data-model="bm25">BM25</button>
+  </div>
+  <div class="hero-hint" id="hero-hint">Showing all books. Start typing to rank by relevance.</div>
+</section>
+
+<main class="layout">
+  <aside class="filters">
+    <h2>Refine</h2>
+
+    <div class="filter-group">
+      <label for="genre">Genre</label>
+      <select id="genre">
+        <option value="All">All genres</option>
+        {% for g in genres %}
+        <option value="{{ g }}">{{ g }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="min-rating">Minimum rating</label>
+      <select id="min-rating">
+        <option value="">Any rating</option>
+        <option value="4.5">4.5 &#9733; &amp; up</option>
+        <option value="4">4.0 &#9733; &amp; up</option>
+        <option value="3.5">3.5 &#9733; &amp; up</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="sort">Sort by</label>
+      <select id="sort">
+        <option value="relevance">Relevance</option>
+        <option value="rating">Rating</option>
+        <option value="popularity">Most rated</option>
+      </select>
+    </div>
+
+    <button id="reset-btn" class="reset-btn">Reset filters</button>
+
+    <div class="legend">
+      <h3>Genre key</h3>
+      <div class="legend-list" id="legend-list"></div>
+    </div>
+  </aside>
+
+  <section class="results-panel">
+    <div class="similar-banner" id="similar-banner" hidden>
+      <span id="similar-banner-text"></span>
+      <button id="clear-similar">&times; Back to search</button>
+    </div>
+    <div class="results-meta" id="results-meta">Loading catalog&hellip;</div>
+    <div class="results-grid" id="results-grid"></div>
+    <div class="empty-state" id="empty-state" hidden>
+      <p>No books matched that search.</p>
+      <span>Try a shorter description, a different genre, or a lower rating floor.</span>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  Built for an Information Retrieval elective &middot; lemmatized text preprocessing &middot; TF&#8209;IDF / BM25 indexing &middot; cosine similarity for "more like this"
+</footer>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
