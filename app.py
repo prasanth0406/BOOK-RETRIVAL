@@ -1,8 +1,14 @@
 from flask import Flask, render_template, request, jsonify
 from retrieval import BookSearchEngine
 
+print("1. Imports completed")
+
 app = Flask(__name__)
+
+print("2. Creating search engine...")
 engine = BookSearchEngine("data/books.csv")
+
+print("3. Search engine created")
 
 
 @app.route("/")
@@ -24,9 +30,14 @@ def api_search():
     sort_by = request.args.get("sort", "relevance")
 
     results = engine.search(
-        query=query, model=model, genre=genre,
-        min_rating=min_rating, sort_by=sort_by, top_k=40,
+        query=query,
+        model=model,
+        genre=genre,
+        min_rating=min_rating,
+        sort_by=sort_by,
+        top_k=40,
     )
+
     return jsonify({"count": len(results), "results": results})
 
 
@@ -37,4 +48,5 @@ def api_similar(book_id):
 
 
 if __name__ == "__main__":
+    print("4. Starting Flask...")
     app.run(debug=True, host="0.0.0.0", port=5001)

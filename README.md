@@ -87,7 +87,7 @@ pip install -r requirements.txt
 python3 app.py
 ```
 
-Then open **http://localhost:5001**. First load takes ~25-30 seconds while
+Then open **http://localhost:3000**. First load takes ~25-30 seconds while
 the TF-IDF and BM25 indexes build over 17K books — that's a one-time cost
 at server startup, not per search.
 
