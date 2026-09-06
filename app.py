@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request, jsonify
 from retrieval import BookSearchEngine
-
-print("1. Imports completed")
+import os
 
 app = Flask(__name__)
 
-print("2. Creating search engine...")
-engine = BookSearchEngine("data/books.csv")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+engine = BookSearchEngine(
+    os.path.join(BASE_DIR, "data", "books.csv"))
 
 print("3. Search engine created")
 
